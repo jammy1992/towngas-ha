@@ -1,0 +1,1134 @@
+{
+ "source": "https://www.towngasvcc.com/orglist",
+ "prefix": "pe92a8wechat",
+ "updated": "2026-11",
+ "branches": [
+  {
+   "code": "ST0105",
+   "name": "三台港华燃气有限公司",
+   "short": "三台港华",
+   "host": "https://mysantai.towngasvcc.com"
+  },
+  {
+   "code": "11313_ZS0106",
+   "name": "中山小榄港华燃气有限公司",
+   "short": "中山小榄港华",
+   "desc": "中山",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "ZS0105",
+   "name": "中山港华燃气有限公司",
+   "short": "中山港华燃气",
+   "desc": "中山市",
+   "host": "https://zhongshan.towngasvcc.com"
+  },
+  {
+   "code": "11105_ZJ0105",
+   "name": "中江港华燃气有限公司",
+   "short": "中江港华燃气",
+   "desc": "中江",
+   "host": "https://zhongjiang.towngasvcc.com"
+  },
+  {
+   "code": "10905_FX0105",
+   "name": "丰县港华燃气有限公司",
+   "short": "丰县港华",
+   "desc": "丰县",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "11201_JXFC0105",
+   "name": "丰城港华燃气有限公司",
+   "short": "丰城港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10412_LQ0105",
+   "name": "临朐港华燃气有限公司",
+   "short": "临朐港华",
+   "desc": "临朐",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "DA0105",
+   "name": "丹阳港华燃气有限公司",
+   "short": "丹阳港华",
+   "desc": "丹阳市",
+   "host": "https://danyang.towngasvcc.com"
+  },
+  {
+   "code": "11111_LZ0105",
+   "name": "乐至港华燃气有限公司",
+   "short": "乐至港华",
+   "desc": "乐至",
+   "host": "https://lezhi.towngasvcc.com"
+  },
+  {
+   "code": "11206_JIJ0105",
+   "name": "九江港华燃气有限公司",
+   "short": "九江港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "1042",
+   "name": "云浮市佛燃天然气有限公司",
+   "short": "云浮佛燃",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10427_WL0105",
+   "name": "五莲港华燃气有限公司",
+   "short": "五莲港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "442",
+   "name": "佛山市三水能源有限公司",
+   "short": "三水能源",
+   "desc": "佛燃三水区",
+   "host": "https://foran4.towngasvcc.com"
+  },
+  {
+   "code": "42",
+   "name": "佛山市禅城能源有限公司",
+   "short": "禅城能源",
+   "desc": "佛山市禅城区",
+   "host": "https://foran6.towngasvcc.com"
+  },
+  {
+   "code": "10010121",
+   "name": "佛山市顺德区港华燃气有限公司",
+   "short": "顺德港华燃气",
+   "desc": "佛燃顺德区",
+   "host": "https://foran5.towngasvcc.com"
+  },
+  {
+   "code": "342",
+   "name": "佛山市高明能源有限公司",
+   "short": "高明能源",
+   "desc": "佛燃高明区",
+   "host": "https://foran3.towngasvcc.com"
+  },
+  {
+   "code": "11202_XS0105",
+   "name": "修水港华燃气有限公司",
+   "short": "修水港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10202_GZL0105",
+   "name": "公主岭港华燃气有限公司",
+   "short": "公主岭",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "11213_GQ0105",
+   "name": "共青城港华燃气有限公司",
+   "short": "共青城港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "12101_XY0105",
+   "name": "兴义港华燃气有限公司",
+   "short": "兴义港华",
+   "desc": "兴义",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "6_BT01",
+   "name": "包头港华燃气有限公司",
+   "short": "包头港华",
+   "desc": "包头",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10501_BR0105",
+   "name": "北京北燃港华燃气有限公司",
+   "short": "北燃港华",
+   "desc": "北燃",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10313_BP0105",
+   "name": "北票港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10910_GC0105",
+   "name": "南京高淳港华燃气有限公司",
+   "short": "高淳港华",
+   "desc": "高淳",
+   "host": "https://gaochun.towngasvcc.com"
+  },
+  {
+   "code": "642",
+   "name": "南雄市佛燃能源有限公司",
+   "short": "南雄佛燃",
+   "desc": "南雄佛燃",
+   "host": "https://foran1.towngasvcc.com"
+  },
+  {
+   "code": "10425_BX0105",
+   "name": "博兴港华燃气有限公司",
+   "short": "博兴港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "JL0105",
+   "name": "吉林港华燃气有限公司",
+   "short": "吉林港华",
+   "desc": "吉林港华",
+   "host": "https://jilin.towngasvcc.com"
+  },
+  {
+   "code": "WJ0105",
+   "name": "吴江港华燃气有限公司",
+   "short": "吴江港华",
+   "desc": "苏州吴江区",
+   "host": "https://wujiang.towngasvcc.com"
+  },
+  {
+   "code": "10314_KZ0105",
+   "name": "喀左港华燃气有限公司",
+   "short": "喀左港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10311_DLLS0105",
+   "name": "大连旅顺港华燃气有限公司",
+   "short": "旅顺港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10317_WFD0105",
+   "name": "大连瓦房店港华燃气有限公司",
+   "short": "瓦房店港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "DY0105",
+   "name": "大邑港华燃气有限公司",
+   "short": "大邑港华燃气",
+   "desc": "成都市大邑县",
+   "host": "https://dayi.towngasvcc.com"
+  },
+  {
+   "code": "10813_HSTP0105",
+   "name": "太平港华燃气有限公司",
+   "short": "太平港华燃气",
+   "desc": "太平",
+   "host": "https://taiping.towngasvcc.com"
+  },
+  {
+   "code": "11118_LSJJ0105",
+   "name": "夹江港华燃气有限公司",
+   "short": "夹江港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "WI0105",
+   "name": "威海港华燃气有限公司",
+   "short": "威海港华燃气",
+   "desc": "威海",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "WI0106",
+   "name": "威海港华燃气有限公司文登分公司",
+   "short": "威海港华燃气文登分公司",
+   "desc": "威海",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "11106_WY0105",
+   "name": "威远港华燃气有限公司",
+   "short": "威远港华",
+   "desc": "威远",
+   "host": "https://weiyuan.towngasvcc.com"
+  },
+  {
+   "code": "10604_MC0105",
+   "name": "孟村回族自治县港华燃气有限公司",
+   "short": "孟村港华",
+   "desc": "孟村",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10421_NY0105",
+   "name": "宁阳港华燃气有限公司",
+   "short": "宁阳港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "AQ0105",
+   "name": "安庆港华燃气有限公司",
+   "short": "安庆港华燃气",
+   "desc": "安庆",
+   "host": "https://anqing.towngasvcc.com"
+  },
+  {
+   "code": "11209_YF0105",
+   "name": "宜丰港华燃气有限公司",
+   "short": "宜丰港华",
+   "host": "https://yifeng.towngasvcc.com"
+  },
+  {
+   "code": "YX0105",
+   "name": "宜兴港华燃气有限公司",
+   "short": "宜兴港华",
+   "desc": "宜兴市",
+   "host": "https://yixing.towngasvcc.com"
+  },
+  {
+   "code": "10422_HY0105",
+   "name": "山东汉岳燃气有限公司",
+   "short": "汉岳燃气",
+   "desc": "汉岳",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "SDJH0105",
+   "name": "山东港华燃气有限公司",
+   "host": "jngas.jinantowngas.com.cn"
+  },
+  {
+   "code": "10401_JNGH0105",
+   "name": "山东港华燃气有限公司（高新客户服务中心）",
+   "host": "wt.shandongtowngas.com.cn"
+  },
+  {
+   "code": "11109_YC0105",
+   "name": "岳池港华燃气有限公司",
+   "short": "岳池港华",
+   "desc": "岳池",
+   "host": "https://yuechi.towngasvcc.com"
+  },
+  {
+   "code": "JJ0105",
+   "name": "常州金坛港华燃气有限公司",
+   "desc": "金坛区",
+   "host": "https://jintan.towngasvcc.com"
+  },
+  {
+   "code": "11406_PL0105",
+   "name": "平乐中威燃气",
+   "short": "平乐港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "643_00646",
+   "name": "平南港华燃气有限公司",
+   "short": "平南港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "11108_PC0105",
+   "name": "平昌港华燃气有限公司",
+   "short": "平昌港华燃气",
+   "desc": "平昌",
+   "host": "https://pingchang.towngasvcc.com"
+  },
+  {
+   "code": "11301_DY0105",
+   "name": "广州东永港华燃气有限公司",
+   "short": "东永港华",
+   "desc": "广州东永",
+   "host": "https://dongyong.towngasvcc.com"
+  },
+  {
+   "code": "11305_GZ0105",
+   "name": "广州港华燃气有限公司",
+   "short": "广州港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "11214_LS0105",
+   "name": "庐山港华燃气有限公司",
+   "short": "庐山港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10319_JP0105",
+   "name": "建平港华燃气有限公司",
+   "short": "建平港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "ZI0105",
+   "name": "张家港港华燃气有限公司",
+   "short": "张家港港华燃气",
+   "desc": "张家港",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "PS0105",
+   "name": "彭山港华燃气有限公司",
+   "short": "彭山港华燃气",
+   "desc": "眉山市彭山区彭祖大道二段358号",
+   "host": "https://pengshan.towngasvcc.com"
+  },
+  {
+   "code": "XZ0105",
+   "name": "徐州港华燃气有限公司",
+   "short": "徐州港华",
+   "desc": "徐州",
+   "host": "https://xuzhou.towngasvcc.com"
+  },
+  {
+   "code": "11211_DE0105",
+   "name": "德安港华燃气有限公司",
+   "short": "德安港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10807_HZ0105",
+   "name": "徽州港华燃气有限公司",
+   "short": "徽州港华燃气",
+   "desc": "徽州",
+   "host": "https://huizhou.towngasvcc.com"
+  },
+  {
+   "code": "644_00647",
+   "name": "忻城港华燃气有限公司",
+   "short": "忻城港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "1142",
+   "name": "恩平市佛燃能源有限公司",
+   "short": "恩平能源",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "XD0105",
+   "name": "成都新都港华燃气有限公司",
+   "short": "成都新都港华燃气",
+   "desc": "成都市新都区",
+   "host": "https://xindu.towngasvcc.com"
+  },
+  {
+   "code": "645_00648",
+   "name": "扶绥港华燃气有限公司",
+   "short": "扶绥港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10417_ZA0105",
+   "name": "招远港华燃气有限公司",
+   "short": "招远港华",
+   "desc": "招远",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "4_XM01",
+   "name": "新密港华燃气有限公司",
+   "short": "新密港华",
+   "desc": "新密",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "11101_XJ0105",
+   "name": "新津港华燃气有限公司",
+   "short": "新津港华燃气",
+   "desc": "新津",
+   "host": "https://xinjin.towngasvcc.com"
+  },
+  {
+   "code": "10316_XQ0105",
+   "name": "新邱港华燃气有限公司",
+   "short": "新邱港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10601_JX0105",
+   "name": "景县港华燃气有限公司",
+   "short": "景县港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "CY0105",
+   "name": "朝阳港华燃气有限公司",
+   "short": "朝阳港华燃气",
+   "desc": "辽宁朝阳",
+   "host": "https://chaoyang.towngasvcc.com"
+  },
+  {
+   "code": "10320_CYX0105",
+   "name": "朝阳港华（朝阳县分公司）",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10304_BX0105",
+   "name": "本溪港华燃气有限公司（主城区）",
+   "short": "本溪港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10304_BX0108",
+   "name": "本溪港华燃气有限公司（太子河新城）",
+   "short": "本溪港华（太子河新城）",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10304_BX0110",
+   "name": "本溪港华燃气有限公司（平山区）",
+   "short": "本溪港华（平山区）",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10304_BX0109",
+   "name": "本溪港华燃气有限公司（本溪新区）",
+   "short": "本溪港华（本溪新区）",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10304_BX0107",
+   "name": "本溪港华燃气有限公司（桥北钢铁园）",
+   "short": "本溪港华（桥北钢铁园）",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10304_BX0106",
+   "name": "本溪港华燃气有限公司（沈本新城）",
+   "short": "本溪港华（沈本新城）",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "YH2001",
+   "name": "杭州余杭港华燃气有限公司",
+   "short": "余杭港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "YH0105",
+   "name": "杭州港华燃气有限公司",
+   "short": "杭州港华",
+   "desc": "崇贤镇、临平镇、乔司镇、塘栖镇、星桥镇、运河镇",
+   "host": "https://hangzhou1.towngasvcc.com"
+  },
+  {
+   "code": "11004_SY0105",
+   "name": "松阳港华燃气有限公司",
+   "short": "松阳港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "11405_LJ0105",
+   "name": "柳州港华燃气有限公司",
+   "short": "柳州港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "584_GL01",
+   "name": "桂林港华燃气有限公司",
+   "short": "桂林港华",
+   "desc": "桂林",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "11001_TX0105",
+   "name": "桐乡港华天然气有限公司",
+   "short": "桐乡港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "11203_ZH0105",
+   "name": "樟树港华燃气有限公司",
+   "short": "樟树港华",
+   "desc": "2020年7月1日樟树市发展和改革委员会文件。工商业用气冬季气价与气源采购价实行联动机制。",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "11207_WN0105",
+   "name": "武宁港华燃气有限公司",
+   "short": "武宁港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "11212_YO0105",
+   "name": "永修港华燃气有限公司",
+   "short": "永修港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "11205_JIX0105",
+   "name": "江西港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10804_CZ0105",
+   "name": "池州港华燃气有限公司",
+   "short": "池州港华",
+   "desc": "池州",
+   "host": "https://chizhou.towngasvcc.com"
+  },
+  {
+   "code": "11501_ML0105",
+   "name": "汨罗港华燃气有限公司",
+   "short": "汨罗港华燃气",
+   "desc": "汨罗",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10312_SHY0105",
+   "name": "沈阳港华燃气有限公司",
+   "short": "沈阳港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "PX0105",
+   "name": "沛县港华燃气有限公司",
+   "short": "沛县港华燃气",
+   "desc": "江苏沛县",
+   "host": "https://peixian.towngasvcc.com"
+  },
+  {
+   "code": "10602_CA0105",
+   "name": "沧县港华燃气有限公司",
+   "short": "沧县港华",
+   "desc": "沧县",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10607_HBCD0105",
+   "name": "河北承德天然气有限公司",
+   "short": "承德天然气",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10620_HBAP0105",
+   "name": "河北省天然气有限责任公司安平分公司",
+   "short": "安平",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "1_TA01",
+   "name": "泰安泰山港华燃气有限公司",
+   "short": "泰山港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "TZ0106",
+   "name": "泰州永安港华燃气有限公司",
+   "short": "泰州永安港华",
+   "desc": "泰州永安",
+   "host": "https://yongan.towngasvcc.com"
+  },
+  {
+   "code": "TZ0105",
+   "name": "泰州港华燃气有限公司",
+   "short": "泰州港华燃气",
+   "desc": "泰州市",
+   "host": "https://taizhou.towngasvcc.com"
+  },
+  {
+   "code": "10414_PY0105",
+   "name": "济南平阴港华燃气有限公司",
+   "short": "平阴港华",
+   "desc": "平阴",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "LX_JN0105",
+   "name": "济南港华燃气有限公司",
+   "short": "济南港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "QY0105",
+   "name": "清远港华燃气有限公司",
+   "short": "清远港华",
+   "desc": "清远市",
+   "host": "https://qingyuan.towngasvcc.com"
+  },
+  {
+   "code": "11003_HZ0105",
+   "name": "湖州港华燃气有限公司",
+   "short": "湖州港华燃气",
+   "desc": "湖州",
+   "host": "https://huzhou.towngasvcc.com"
+  },
+  {
+   "code": "WF0116",
+   "name": "潍坊港华燃气(潍州港华)",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "WF0105",
+   "name": "潍坊港华燃气有限公司",
+   "short": "潍坊港华燃气",
+   "desc": "潍坊",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "WF0106",
+   "name": "潍坊港华燃气有限公司(奎文)",
+   "short": "潍坊港华燃气(奎文)",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "WF0108",
+   "name": "潍坊港华燃气有限公司(寒亭)",
+   "short": "潍坊港华燃气(寒亭)",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "WF0110",
+   "name": "潍坊港华燃气有限公司(峡山)",
+   "short": "潍坊港华燃气(峡山)",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "WF0111",
+   "name": "潍坊港华燃气有限公司(昌乐朱刘)",
+   "short": "潍坊港华燃气(昌乐朱刘)",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "WF0112",
+   "name": "潍坊港华燃气有限公司(昌乐营丘)",
+   "short": "潍坊港华燃气(昌乐营丘)",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "WF0109",
+   "name": "潍坊港华燃气有限公司(滨海)",
+   "short": "潍坊港华燃气(滨海)",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "WF0107",
+   "name": "潍坊港华燃气有限公司(潍城)",
+   "short": "潍坊港华燃气(潍城)",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "WF0114",
+   "name": "潍坊港华燃气有限公司(潍城城郊)",
+   "short": "潍坊港华燃气(潍城城郊)",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "WF0113",
+   "name": "潍坊港华燃气有限公司(经开)",
+   "short": "潍坊港华燃气(经开)",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10816_AQWJ0105",
+   "name": "皖江港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10603_YS0105",
+   "name": "盐山港华燃气有限公司",
+   "short": "盐山港华",
+   "desc": "盐山",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "11124_PSJB0105",
+   "name": "眉山市彭山港华金碧燃气有限公司",
+   "short": "港华金碧",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10904_SN0105",
+   "name": "睢宁港华燃气有限公司",
+   "short": "睢宁港华",
+   "desc": "睢宁",
+   "host": "https://suining.towngasvcc.com"
+  },
+  {
+   "code": "10605_HBJT0105",
+   "name": "石家庄建投天然气有限公司",
+   "short": "石建投",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10315_QHD0105",
+   "name": "秦皇岛港华燃气有限公司",
+   "short": "秦皇岛港华",
+   "host": "https://qinhuangdao.towngasvcc.com"
+  },
+  {
+   "code": "11112_JY0105",
+   "name": "简阳港华燃气有限公司",
+   "short": "简阳港华燃气",
+   "desc": "简阳",
+   "host": "https://jianyang.towngasvcc.com"
+  },
+  {
+   "code": "11116_MZ0105",
+   "name": "绵竹港华燃气有限公司",
+   "short": "绵竹港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "11122_YQ0105",
+   "name": "绵竹玉泉港华燃气有限公司",
+   "short": "绵竹玉泉港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "11120_DS0105",
+   "name": "绵阳三台东昇港华燃气有限公司",
+   "short": "绵阳三台东昇港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "11121_HQ0105",
+   "name": "绵阳河清港华燃气有限公司",
+   "short": "绵阳河清港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "MY0105",
+   "name": "绵阳港华燃气有限公司",
+   "short": "绵阳港华燃气",
+   "desc": "绵阳港华",
+   "host": "https://mianyang.towngasvcc.com"
+  },
+  {
+   "code": "542",
+   "name": "肇庆佛燃能源有限公司",
+   "short": "肇庆能源",
+   "desc": "佛燃肇庆高要",
+   "host": "https://foran2.towngasvcc.com"
+  },
+  {
+   "code": "10415_FC0105",
+   "name": "肥城港华燃气有限公司",
+   "short": "肥城港华",
+   "desc": "肥城",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "HYSW_WU0105",
+   "name": "芜湖华衍水务有限公司",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10815_WUJ0105",
+   "name": "芜湖江北港华燃气有限公司",
+   "short": "芜湖江北港华",
+   "host": "https://wuhujiangbei.towngasvcc.com"
+  },
+  {
+   "code": "10810_WU0105",
+   "name": "芜湖港华燃气有限公司",
+   "short": "芜湖港华",
+   "desc": "芜湖",
+   "host": "https://wuhu.towngasvcc.com"
+  },
+  {
+   "code": "11107_CX0105",
+   "name": "苍溪港华燃气有限公司",
+   "short": "苍溪港华燃气",
+   "desc": "苍溪",
+   "host": "https://cangxi.towngasvcc.com"
+  },
+  {
+   "code": "SU0105",
+   "name": "苏州港华燃气有限公司",
+   "short": "苏州港华",
+   "desc": "苏州工业园区",
+   "host": "https://suzhou.towngasvcc.com"
+  },
+  {
+   "code": "10411_CP0105",
+   "name": "茌平港华燃气有限公司",
+   "short": "茌平港华",
+   "desc": "茌平",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10416_LY0105",
+   "name": "莱阳港华燃气有限公司",
+   "short": "莱阳港华",
+   "desc": "莱阳",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "11216_WGS0105",
+   "name": "萍乡武功山港华燃气有限公司",
+   "short": "萍乡武功山港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "11204_PXJV0105",
+   "name": "萍乡港华燃气有限公司",
+   "short": "萍乡港华",
+   "host": "https://pingxiang.towngasvcc.com"
+  },
+  {
+   "code": "11215_GKJV0105",
+   "name": "萍乡高坑工业煤气有限公司",
+   "short": "高坑工业煤气",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10308_YK0105",
+   "name": "营口港华燃气有限公司",
+   "short": "营口港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "8_PX0105",
+   "name": "蓬溪港华燃气有限公司",
+   "short": "蓬溪港华燃气",
+   "desc": "蓬溪",
+   "host": "https://pengxi.towngasvcc.com"
+  },
+  {
+   "code": "10617_HBHS0105",
+   "name": "衡水建投",
+   "short": "衡水",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "11113_ZY0105",
+   "name": "资阳港华燃气有限公司",
+   "short": "资阳港华燃气",
+   "desc": "资阳",
+   "host": "https://ziyang.towngasvcc.com"
+  },
+  {
+   "code": "11902_DM0105",
+   "name": "达茂港华",
+   "short": "达茂",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "11114_CQ0105",
+   "name": "重庆港华燃气有限公司",
+   "short": "重庆港华",
+   "desc": "重庆",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "11401_GXZS0105",
+   "name": "钟山港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10307_TI0101",
+   "name": "铁岭港华燃气有限公司",
+   "short": "铁岭港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10307_TI0105",
+   "name": "铁岭港华燃气有限公司（专用车基地）",
+   "short": "铁岭港华（专用车基地）",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10307_TI0102",
+   "name": "铁岭港华燃气有限公司（开原区）",
+   "short": "铁岭港华（开原区）",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10307_TI0103",
+   "name": "铁岭港华燃气有限公司（清河区）",
+   "short": "铁岭港华（清河区）",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10307_TI0104",
+   "name": "铁岭港华燃气有限公司（铁岭县）",
+   "short": "铁岭港华（铁岭县）",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10918_TS0105",
+   "name": "铜山港华燃气有限公司",
+   "short": "铜山港华",
+   "desc": "铜山",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "TL0105",
+   "name": "铜陵港华燃气有限公司",
+   "short": "铜陵港华",
+   "desc": "铜陵",
+   "host": "https://tongling.towngasvcc.com"
+  },
+  {
+   "code": "10201_CC0105",
+   "name": "长春燃气股份有限公司",
+   "short": "长春燃气",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10201_CC0106",
+   "name": "长春燃气股份有限公司（东部分区）",
+   "short": "长春燃气（东部分区）",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10201_CC0110",
+   "name": "长春燃气股份有限公司（净月分区）",
+   "short": "长春燃气（净月分区）",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10201_CC0109",
+   "name": "长春燃气股份有限公司（北部分区）",
+   "short": "长春燃气（北部分区）",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10201_CC0107",
+   "name": "长春燃气股份有限公司（南部分区）",
+   "short": "长春燃气（南部分区）",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10201_CC0111",
+   "name": "长春燃气股份有限公司（新区分区）",
+   "short": "长春燃气（新区分区）",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10201_CC0108",
+   "name": "长春燃气股份有限公司（西部分区）",
+   "short": "长春燃气（西部分区）",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "11601_CT0105",
+   "name": "长汀港华燃气有限公司",
+   "short": "长汀港华",
+   "desc": "长汀",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10306_LNFX0105",
+   "name": "阜新港华燃气有限公司",
+   "short": "阜新港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10424_YX0105",
+   "name": "阳信港华燃气有限公司",
+   "short": "阳信港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "11307_YJ0105",
+   "name": "阳江港华燃气有限公司",
+   "short": "阳江港华",
+   "desc": "阳江",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "12001_LL0105",
+   "name": "陆良港华燃气有限公司",
+   "short": "陆良港华",
+   "desc": "陆良",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10403_QD0105",
+   "name": "青岛东亿港华燃气有限公司",
+   "short": "东亿港华",
+   "desc": "东亿",
+   "host": "https://dongyi.towngasvcc.com"
+  },
+  {
+   "code": "JM0105",
+   "name": "青岛中即港华燃气有限公司",
+   "short": "青岛中即港华",
+   "desc": "青岛即墨区",
+   "host": "https://zhongji.towngasvcc.com"
+  },
+  {
+   "code": "10423_FT0105",
+   "name": "青岛福泰港华燃气有限公司",
+   "short": "福泰港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10814_CZQY0105",
+   "name": "青阳港华燃气有限公司",
+   "short": "青阳港华",
+   "desc": "青阳",
+   "host": "https://qingyang.towngasvcc.com"
+  },
+  {
+   "code": "10309_AS0105",
+   "name": "鞍山港华",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "11303_SG0105",
+   "name": "韶关港华燃气有限公司",
+   "short": "韶关港华",
+   "desc": "韶关港华燃气有限公司",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "10619_HBRY0105",
+   "name": "饶阳建投天然气有限公司",
+   "short": "饶阳建投",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "MA0103",
+   "name": "马鞍山博望港华燃气有限公司",
+   "short": "博望港华",
+   "desc": "马鞍山博望港华",
+   "host": "https://bowang.towngasvcc.com"
+  },
+  {
+   "code": "MA0107",
+   "name": "马鞍山江北港华燃气有限公司",
+   "short": "马鞍山江北港华",
+   "desc": "马鞍山江北",
+   "host": "https://maanshanjiangbei.towngasvcc.com"
+  },
+  {
+   "code": "MA0105",
+   "name": "马鞍山港华燃气有限公司",
+   "short": "马鞍山港华",
+   "desc": "马鞍山市区、慈湖区、花山区等",
+   "host": "https://maanshan.towngasvcc.com"
+  },
+  {
+   "code": "10805_HS0105",
+   "name": "黄山港华燃气有限公司",
+   "short": "黄山港华燃气",
+   "desc": "黄山",
+   "host": "https://huangshan.towngasvcc.com"
+  },
+  {
+   "code": "10103_FQ0105",
+   "name": "齐齐哈尔港华富拉尔基分公司",
+   "short": "齐齐哈尔港华富区",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "QQ0105",
+   "name": "齐齐哈尔港华燃气有限公司",
+   "short": "齐齐哈尔港华",
+   "desc": "齐齐哈尔",
+   "host": "https://qiqihaer.towngasvcc.com"
+  },
+  {
+   "code": "10102_AA0105",
+   "name": "齐齐哈尔港华燃气有限公司（昂昂溪区）",
+   "short": "齐齐哈尔港华（昂昂溪区）",
+   "host": "https://www.towngasvcc.com"
+  },
+  {
+   "code": "LK0105",
+   "name": "龙口港华燃气有限公司",
+   "short": "龙口港华燃气",
+   "desc": "龙口市",
+   "host": "https://longkou.towngasvcc.com"
+  }
+ ]
+}

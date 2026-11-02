@@ -1,0 +1,16 @@
+{
+  "domain": "hztowngas",
+  "name": "港华燃气",
+  "codeowners": [
+    "@jammy1992"
+  ],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://github.com/jammy1992/towngas-ha",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/jammy1992/towngas-ha/issues",
+  "requirements": [
+    "qrcode[pil]>=7.4.2"
+  ],
+  "version": "2.0.0"
+}

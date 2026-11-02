@@ -1,0 +1,87 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "TownGas — Select your branch",
+        "description": "Pick the branch that serves your gas meter ({branch_count} branches bundled).\n\nThe WeChat OAuth clientId is derived as \"{prefix} + branch orgCode (underscores removed)\", so this step decides which branch's official account the QR code points to.\n\nIf you already know the clientId, fill it in the second field to override.",
+        "data": {
+          "org_code": "Branch",
+          "client_id": "Custom clientId (optional)"
+        }
+      },
+      "auth": {
+        "title": "TownGas — WeChat authorization & account",
+        "description": "Branch: {branch}\n\nclientId: `{client_id}`\n\nScan the QR code below with **WeChat on your phone** (PC browsers are blocked):\n\n{oauth_qr_markdown}\n\nA blank page after scanning is normal — copy the whole URL from the address bar and paste it into the first field.\n\nAuth URL: {oauth_url}",
+        "data": {
+          "auth_code": "authCode (or full redirect URL)",
+          "subs_id": "subsId (32 chars)",
+          "subs_code": "subsCode",
+          "scan_interval": "Data refresh interval (s, 60-86400, default 21600)",
+          "token_refresh_interval": "Token refresh interval (s, 300-7140, default 1800)",
+          "default_price": "Default gas price (CNY/m³, used when the API omits it)"
+        }
+      },
+      "reauth_confirm": {
+        "title": "TownGas — Re-authorize",
+        "description": "The stored token is no longer valid. Confirm your branch ({branch_count} bundled) so the QR code points to the right official account.",
+        "data": {
+          "org_code": "Branch",
+          "client_id": "Custom clientId (optional)"
+        }
+      },
+      "reauth_token": {
+        "title": "TownGas — Paste the new authCode",
+        "description": "Branch: {branch}\n\nScan the QR code below with **WeChat on your phone**:\n\n{oauth_qr_markdown}\n\nPaste the full redirect URL below.\n\nAuth URL: {oauth_url}",
+        "data": {
+          "auth_code": "authCode (or full redirect URL)"
+        }
+      }
+    },
+    "abort": {
+      "already_configured": "This account is already configured.",
+      "reauth_successful": "Re-authorization successful."
+    },
+    "error": {
+      "client_id_required": "Select a branch or enter a clientId.",
+      "client_id_invalid": "This branch did not return a WeChat redirect (clientId rejected). Check the branch, or enter a clientId manually.",
+      "oauth_url_failed": "Failed to fetch the WeChat auth URL. Check internet connectivity.",
+      "exchange_failed": "Token exchange failed — the authCode is single-use, scan again if it expired.",
+      "auth_failed": "Authorization failed, no valid token received.",
+      "subs_required": "subsId and subsCode are required."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "TownGas — Options",
+        "description": "Branch: {branch}\nclientId: `{client_id}`\n\nChanging the branch requires re-scanning; remove and re-add the entry instead.",
+        "data": {
+          "scan_interval": "Data refresh interval (s, 60-86400, default 21600)",
+          "token_refresh_interval": "Token refresh interval (s, 300-7140, default 1800)",
+          "default_price": "Default gas price (CNY/m³)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "gas_meter_reading": {
+        "name": "Gas meter reading"
+      },
+      "account_balance": {
+        "name": "Account balance"
+      },
+      "daily_usage": {
+        "name": "Previous day usage"
+      },
+      "daily_cost": {
+        "name": "Previous day cost"
+      }
+    },
+    "button": {
+      "refresh_data": {
+        "name": "Refresh now"
+      }
+    }
+  }
+}

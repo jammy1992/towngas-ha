@@ -1,0 +1,87 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "港华燃气 — 选择所属分公司",
+        "description": "请选择你的燃气表所属分公司（内置 {branch_count} 家）。\n\n微信授权的 clientId 按「{prefix} + 分公司 orgCode（去掉下划线）」生成，所以这一步决定了扫码时进入哪家分公司的公众号。\n\n如果你已经从别处拿到 clientId（例如某些不按此规律的分公司），可以填在下面第二个框里，它会覆盖自动生成的值。",
+        "data": {
+          "org_code": "分公司",
+          "client_id": "自定义 clientId（可选，留空自动生成）"
+        }
+      },
+      "auth": {
+        "title": "港华燃气 — 微信授权与户号",
+        "description": "当前分公司：{branch}\n\nclientId：`{client_id}`\n\n请用**手机微信**扫描下面的二维码完成授权（PC 浏览器打开会被拦）：\n\n{oauth_qr_markdown}\n\n扫码后会出现白屏，这是正常的。把地址栏那条链接整条复制下来，粘贴到第一个输入框（会自动截取 authCode 部分）。\n\n授权链接：{oauth_url}",
+        "data": {
+          "auth_code": "authCode（或完整跳转 URL）",
+          "subs_id": "户号 ID（subsId，32 位）",
+          "subs_code": "户号（subsCode）",
+          "scan_interval": "数据刷新间隔（秒，60-86400，默认 21600）",
+          "token_refresh_interval": "Token 刷新间隔（秒，300-7140，默认 1800）",
+          "default_price": "默认气价（元/m³，接口未返回单价时使用）"
+        }
+      },
+      "reauth_confirm": {
+        "title": "港华燃气 — 重新授权",
+        "description": "令牌已失效，需要重新微信扫码授权。\n\n请确认所属分公司（内置 {branch_count} 家），它会决定下一步二维码指向哪家分公司的公众号。",
+        "data": {
+          "org_code": "分公司",
+          "client_id": "自定义 clientId（可选，留空自动生成）"
+        }
+      },
+      "reauth_token": {
+        "title": "港华燃气 — 扫码后粘贴 authCode",
+        "description": "当前分公司：{branch}\n\n请用**手机微信**扫描下面的二维码：\n\n{oauth_qr_markdown}\n\n扫码后可能出现白屏，把地址栏链接整条粘贴到下方即可。\n\n授权链接：{oauth_url}",
+        "data": {
+          "auth_code": "authCode（或完整跳转 URL）"
+        }
+      }
+    },
+    "abort": {
+      "already_configured": "该户号已添加，如需更换账号请先删除现有集成条目。",
+      "reauth_successful": "重新授权成功。"
+    },
+    "error": {
+      "client_id_required": "请选择分公司，或手动填写 clientId。",
+      "client_id_invalid": "该分公司未能拉起微信授权（clientId 未生效）。请确认分公司选择是否正确；仍失败时请在第二个框手填 clientId，或改用「抓包/App 抓取」得到的 clientId。",
+      "oauth_url_failed": "获取微信授权链接失败，请检查 HA 的外网连通性后重试。",
+      "exchange_failed": "兑换 Token 失败，请检查 authCode 是否正确（authCode 只能用一次，过期请重新扫码）。",
+      "auth_failed": "授权失败，未获取到有效 Token。",
+      "subs_required": "户号 ID 和户号不能为空。"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "港华燃气 — 设置",
+        "description": "当前分公司：{branch}\n当前 clientId：`{client_id}`\n\n修改分公司需要重新扫码授权，请删除条目后重新添加。",
+        "data": {
+          "scan_interval": "数据刷新间隔（秒，60-86400，默认 21600）",
+          "token_refresh_interval": "Token 刷新间隔（秒，300-7140，默认 1800）",
+          "default_price": "默认气价（元/m³，接口未返回单价时使用）"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "gas_meter_reading": {
+        "name": "燃气表读数"
+      },
+      "account_balance": {
+        "name": "账户余额"
+      },
+      "daily_usage": {
+        "name": "昨日用气量"
+      },
+      "daily_cost": {
+        "name": "昨日气费"
+      }
+    },
+    "button": {
+      "refresh_data": {
+        "name": "立即刷新"
+      }
+    }
+  }
+}
