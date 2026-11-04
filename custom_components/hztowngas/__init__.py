@@ -16,7 +16,15 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.event import async_call_later
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
-from .api import AuthError, TownGasApi
+from .api import (
+    ERR_TOKEN_INVALID,
+    AuthError,
+    TownGasApi,
+    is_ok_code,
+    result_code,
+    result_message,
+    strip_html,
+)
 from .const import (
     CONF_ACCESS_TOKEN,
     CONF_CLIENT_ID,
@@ -49,6 +57,42 @@ def _in_maintenance_window() -> bool:
     """True during TownGas daily maintenance (23:30–00:30 CST)."""
     now = datetime.now(tz=_CST)
     return (now.hour == 23 and now.minute >= 30) or (now.hour == 0 and now.minute < 30)
+
+
+async def _triage_error_10001(api: TownGasApi, subs_id: str, api_msg: str) -> None:
+    """区分 10001 的两种真实原因，给出可执行的处置。
+
+    - 账号信息接口能读到户号 → 令牌没问题，是户号不属于该账号 → UpdateFailed
+    - 账号信息接口也读不到     → 登录态/分公司不匹配     → 触发重新授权
+    """
+    try:
+        account = await api.fetch_account()
+    except AuthError as err:
+        raise ConfigEntryAuthFailed(f"港华 10001 且刷新令牌失败: {err}") from err
+    except Exception:  # noqa: BLE001 — 诊断失败不应掩盖原始错误
+        _LOGGER.debug("10001 诊断：账号信息接口异常", exc_info=True)
+        account = {}
+
+    subs = account.get("subs") or []
+    if subs:
+        available = "、".join(
+            item.get("subs_code") or item.get("subs_id", "")[:8] for item in subs
+        )
+        _LOGGER.error(
+            "令牌有效，但户号 %s 不在当前登录账号名下；可用户号：%s", subs_id, available,
+        )
+        raise UpdateFailed(
+            f"户号不属于当前登录账号（港华返回 10001）。"
+            f"当前账号名下有：{available}。"
+            f"请在「重新授权」里重新选择户号，或删除该条目后重新添加。"
+        )
+
+    _LOGGER.warning(
+        "港华 10001 且账号信息接口同样不可用（%s）→ 判定为登录态失效，触发重新授权", api_msg,
+    )
+    raise ConfigEntryAuthFailed(
+        "港华返回 10001（登录态失效或分公司/令牌不匹配），需要重新微信授权"
+    )
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: TownGasConfigEntry) -> bool:
@@ -114,10 +158,17 @@ async def async_setup_entry(hass: HomeAssistant, entry: TownGasConfigEntry) -> b
         # flipping to "unknown".
         if isinstance(result, dict):
             datas = result.get("datas") if isinstance(result.get("datas"), dict) else {}
-            err_code = datas.get("errorCode") if datas else result.get("resultCode")
-            err_msg  = datas.get("errorMsg")  if datas else result.get("resultMsg", "")
-            if err_code is not None and str(err_code) not in ("", "0", 0):
+            err_code = result_code(result)
+            err_msg = strip_html(result_message(result))
+            if not is_ok_code(err_code):
                 _LOGGER.warning("API 返回错误 %s: %s", err_code, err_msg)
+                if str(err_code) == ERR_TOKEN_INVALID:
+                    # 10001 是港华网关的「万能失败码」，页面提示往往是
+                    # 「系统正在升级中......」。真实原因只有两种：
+                    #   1) 登录态失效 / 令牌与分公司不匹配 → 需要重新授权
+                    #   2) 令牌有效，但这个户号不在账号名下 → 换户号即可
+                    # 用「账号信息接口能不能读到户号」来区分。
+                    await _triage_error_10001(api, subs_id, err_msg)
                 raise UpdateFailed(f"API 错误 {err_code}: {err_msg}")
             # Also raise when datas is present but has no readingRptList —
             # the API sometimes returns an empty/partial response at the edge

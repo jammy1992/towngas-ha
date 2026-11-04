@@ -3,27 +3,40 @@
     "step": {
       "user": {
         "title": "港华燃气 — 选择所属分公司",
-        "description": "请选择你的燃气表所属分公司（内置 {branch_count} 家）。\n\n微信授权的 clientId 按「{prefix} + 分公司 orgCode（去掉下划线）」生成，所以这一步决定了扫码时进入哪家分公司的公众号。\n\n如果你已经从别处拿到 clientId（例如某些不按此规律的分公司），可以填在下面第二个框里，它会覆盖自动生成的值。",
+        "description": "请选择你的燃气表所属分公司（内置 {branch_count} 家）。\n\n微信授权的 clientId 按「{prefix} + 分公司 orgCode（去掉下划线）」生成，所以这一步决定了扫码时进入哪家分公司的公众号。**选错分公司会导致登录后报 10001（系统正在升级中）**。\n\n如果你已经从别处拿到 clientId（例如某些不按此规律的分公司），可以填在下面第二个框里，它会覆盖自动生成的值。",
         "data": {
           "org_code": "分公司",
           "client_id": "自定义 clientId（可选，留空自动生成）"
         }
       },
       "auth": {
-        "title": "港华燃气 — 微信授权与户号",
-        "description": "当前分公司：{branch}\n\nclientId：`{client_id}`\n\n请用**手机微信**扫描下面的二维码完成授权（PC 浏览器打开会被拦）：\n\n{oauth_qr_markdown}\n\n扫码后会出现白屏，这是正常的。把地址栏那条链接整条复制下来，粘贴到第一个输入框（会自动截取 authCode 部分）。\n\n授权链接：{oauth_url}",
+        "title": "港华燃气 — 微信授权",
+        "description": "当前分公司：**{branch}**\n\nclientId：`{client_id}`\n\n请用**手机微信**扫描下面的二维码完成授权（PC 浏览器打开会被拦）：\n\n{oauth_qr_markdown}\n\n扫码后会出现白屏，这是正常的。把地址栏那条链接整条复制下来，粘贴到下面的输入框（会自动截取 authCode 部分）。\n\n户号不需要手填：授权成功后集成会直接读取该微信账号名下的户号。\n\n授权链接：{oauth_url}",
         "data": {
           "auth_code": "authCode（或完整跳转 URL）",
-          "subs_id": "户号 ID（subsId，32 位）",
-          "subs_code": "户号（subsCode）",
           "scan_interval": "数据刷新间隔（秒，60-86400，默认 21600）",
           "token_refresh_interval": "Token 刷新间隔（秒，300-7140，默认 1800）",
           "default_price": "默认气价（元/m³，接口未返回单价时使用）"
         }
       },
+      "pick_subs": {
+        "title": "港华燃气 — 选择户号",
+        "description": "当前分公司：**{branch}**\n\n已从账号中读取到 {subs_count} 个户号，请选择要接入的那一个：\n\n{detected}",
+        "data": {
+          "subs_id": "户号"
+        }
+      },
+      "manual_subs": {
+        "title": "港华燃气 — 手动填写户号",
+        "description": "当前分公司：**{branch}**\n\nclientId：`{client_id}`\n\n⚠️ 没能自动读取到账号下的户号：{account_note}\n\n请手动填写该户号对应的 subsId（32 位）与 subsCode。填写后集成会立刻用它们试抓一次数据，抓不到会直接报错，不会写入错误的配置。\n\n如果报「10001 / 系统正在升级中」，通常说明**分公司选错了**：例如你的供气方是「杭州余杭港华燃气有限公司」，却选了「大邑港华燃气有限公司」。可以返回上一步重新选择，或删除条目后重新添加。",
+        "data": {
+          "subs_id": "户号 ID（subsId，32 位）",
+          "subs_code": "户号（subsCode）"
+        }
+      },
       "reauth_confirm": {
         "title": "港华燃气 — 重新授权",
-        "description": "令牌已失效，需要重新微信扫码授权。\n\n请确认所属分公司（内置 {branch_count} 家），它会决定下一步二维码指向哪家分公司的公众号。",
+        "description": "令牌已失效，需要重新微信扫码授权。\n\n当前记录的分公司：**{current_branch}**\n\n如果不是这家，请在这里重新选择（内置 {branch_count} 家）。选错分公司会报 10001。",
         "data": {
           "org_code": "分公司",
           "client_id": "自定义 clientId（可选，留空自动生成）"
@@ -31,7 +44,7 @@
       },
       "reauth_token": {
         "title": "港华燃气 — 扫码后粘贴 authCode",
-        "description": "当前分公司：{branch}\n\n请用**手机微信**扫描下面的二维码：\n\n{oauth_qr_markdown}\n\n扫码后可能出现白屏，把地址栏链接整条粘贴到下方即可。\n\n授权链接：{oauth_url}",
+        "description": "当前分公司：**{branch}**\n\n请用**手机微信**扫描下面的二维码：\n\n{oauth_qr_markdown}\n\n扫码后可能出现白屏，把地址栏链接整条粘贴到下方即可。授权成功后集成会自动核对账号下的户号。\n\n授权链接：{oauth_url}",
         "data": {
           "auth_code": "authCode（或完整跳转 URL）"
         }
@@ -47,14 +60,18 @@
       "oauth_url_failed": "获取微信授权链接失败，请检查 HA 的外网连通性后重试。",
       "exchange_failed": "兑换 Token 失败，请检查 authCode 是否正确（authCode 只能用一次，过期请重新扫码）。",
       "auth_failed": "授权失败，未获取到有效 Token。",
-      "subs_required": "户号 ID 和户号不能为空。"
+      "subs_required": "户号 ID 和户号不能为空。",
+      "subs_mismatch": "所选户号不在当前登录账号名下，请重新选择。",
+      "org_mismatch": "港华返回 10001（页面提示「系统正在升级中」）：该户号不属于当前登录的分公司/账号。请返回上一步确认分公司是否选对（同一城市有多家分公司时尤其容易选错）；如果分公司没错，请确认该户号确实在这个微信账号下。",
+      "subs_invalid": "这个户号试抓数据失败，请确认 subsId / subsCode 是否填反或复制完整。",
+      "subs_no_data": "接口没有返回这个户号的读数，请确认户号是否正确（新装表可能暂时无读数）。"
     }
   },
   "options": {
     "step": {
       "init": {
         "title": "港华燃气 — 设置",
-        "description": "当前分公司：{branch}\n当前 clientId：`{client_id}`\n\n修改分公司需要重新扫码授权，请删除条目后重新添加。",
+        "description": "当前分公司：**{branch}**\n当前 clientId：`{client_id}`\n当前户号：**{subs_code}**\n\n修改分公司或户号需要重新扫码授权，请删除条目后重新添加（或使用「重新授权」）。",
         "data": {
           "scan_interval": "数据刷新间隔（秒，60-86400，默认 21600）",
           "token_refresh_interval": "Token 刷新间隔（秒，300-7140，默认 1800）",

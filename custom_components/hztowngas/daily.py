@@ -1,15 +1,24 @@
-"""Track daily gas usage by diffing consecutive meter readings.
+"""Track daily gas usage by diffing daily meter snapshots.
 
-The TownGas API only ever returns the *latest* reading, so "yesterday's usage"
-has to be derived: we persist the last observed (date, reading) pair and, when
-the reading date advances, the difference becomes the usage of the day that
-just closed.
+Why snapshots and not "diff by recordDate jump":
+
+The TownGas API returns a *reading date* and a *cumulative reading*, but the two
+are not updated at the same time. In practice the date advances at midnight while
+the reading for that day only lands a few hours later. An earlier version of this
+module settled usage the moment the date changed, which produced a delta of 0 at
+midnight and then silently swallowed the real increment as a "same-day revision"
+— the daily sensor stayed at 0 forever.
+
+This version instead keeps one snapshot per **local observation day** (the newest
+reading seen that day) and settles usage between the two most recent *completed*
+days. Late-arriving readings simply raise today's snapshot; nothing is settled
+before the day is over, so the lag no longer matters.
 """
 
 from __future__ import annotations
 
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Any
 
 from homeassistant.core import HomeAssistant
@@ -18,9 +27,11 @@ from homeassistant.util import dt as dt_util
 
 _LOGGER = logging.getLogger(__name__)
 
-STORAGE_VERSION = 1
+STORAGE_VERSION = 2
 STORAGE_KEY = "hztowngas_daily"
 DEFAULT_PRICE = 3.45
+MAX_SNAPSHOTS = 31
+DATE_FMT = "%Y-%m-%d"
 
 
 def _to_float(value: Any) -> float | None:
@@ -43,20 +54,18 @@ def _norm_date(value: Any) -> str | None:
     return text
 
 
-def _day_gap(start: str | None, end: str | None) -> int:
+def _day_gap(start: str, end: str) -> int:
     """Whole days between two YYYY-MM-DD strings, minimum 1."""
-    if not start or not end:
-        return 1
     try:
-        d1 = datetime.strptime(start, "%Y-%m-%d")
-        d2 = datetime.strptime(end, "%Y-%m-%d")
+        d1 = datetime.strptime(start, DATE_FMT)
+        d2 = datetime.strptime(end, DATE_FMT)
     except ValueError:
         return 1
     return max((d2 - d1).days, 1)
 
 
 def extract_reading(datas: dict[str, Any]) -> tuple[float | None, str | None]:
-    """Pull the latest cumulative reading + its record date."""
+    """Pull the latest cumulative reading + the date the API attaches to it."""
     reports = datas.get("readingRptList")
     if isinstance(reports, list) and reports and isinstance(reports[0], dict):
         report = reports[0]
@@ -94,7 +103,7 @@ def extract_price(datas: dict[str, Any]) -> float | None:
 
 
 class DailyUsageTracker:
-    """Persist the previous reading and derive per-day usage."""
+    """Persist one reading snapshot per day and settle usage on completed days."""
 
     def __init__(
         self, hass: HomeAssistant, entry_id: str, default_price: float = DEFAULT_PRICE
@@ -105,7 +114,7 @@ class DailyUsageTracker:
         self._default_price: float = (
             float(default_price) if default_price and default_price > 0 else DEFAULT_PRICE
         )
-        self._state: dict[str, Any] = {}
+        self._state: dict[str, Any] = {"snapshots": {}}
 
         self.usage: float | None = None
         self.usage_start: str | None = None
@@ -116,104 +125,159 @@ class DailyUsageTracker:
         self.price: float = self._default_price
         self.price_source: str = "default"
 
-    async def async_load(self) -> None:
-        """Restore the persisted baseline."""
-        stored = await self._store.async_load()
-        if isinstance(stored, dict):
-            self._state = stored
-            self.usage = _to_float(stored.get("usage"))
-            self.usage_start = stored.get("usage_start")
-            self.usage_end = stored.get("usage_end")
-            saved_days = stored.get("days")
-            self.days = int(saved_days) if isinstance(saved_days, int) and saved_days > 0 else 1
-            self.prev_reading = _to_float(stored.get("prev_reading"))
-        _LOGGER.debug("DailyUsageTracker restored: %s", self._state)
+        # Diagnostics surfaced as entity attributes.
+        self.snapshot_days: int = 0
+        self.latest_date: str | None = None
+        self.latest_observed: str | None = None
+        self.latest_record_date: str | None = None
+        self.status: str = "等待数据"
 
+    # ------------------------------------------------------------------ load
+    async def async_load(self) -> None:
+        """Restore persisted snapshots (and migrate the v1 baseline)."""
+        stored = await self._store.async_load()
+        if not isinstance(stored, dict):
+            return
+
+        snapshots = stored.get("snapshots")
+        if isinstance(snapshots, dict):
+            self._state["snapshots"] = {
+                str(k): v for k, v in snapshots.items() if isinstance(v, dict)
+            }
+        else:
+            # v1 state: {"date": ..., "reading": ..., "usage": ...}
+            legacy_date = stored.get("date")
+            legacy_reading = _to_float(stored.get("reading"))
+            if legacy_date and legacy_reading is not None:
+                self._state["snapshots"] = {
+                    str(legacy_date): {
+                        "reading": legacy_reading,
+                        "record_date": str(legacy_date),
+                        "observed_at": str(stored.get("observed_at") or ""),
+                    }
+                }
+                _LOGGER.info(
+                    "迁移旧的日用量基线：%s @ %.3f m³", legacy_date, legacy_reading
+                )
+
+        self.usage = _to_float(stored.get("usage"))
+        self.usage_start = stored.get("usage_start")
+        self.usage_end = stored.get("usage_end")
+        saved_days = stored.get("days")
+        self.days = int(saved_days) if isinstance(saved_days, int) and saved_days > 0 else 1
+        self.prev_reading = _to_float(stored.get("prev_reading"))
+        self._refresh_diagnostics()
+        _LOGGER.debug(
+            "每日用量跟踪器已恢复：%s 个快照，最新 %s", self.snapshot_days, self.latest_date
+        )
+
+    # ----------------------------------------------------------------- ingest
     async def async_handle(self, datas: dict[str, Any]) -> None:
-        """Ingest a fresh API payload and update the daily counters."""
+        """Ingest a fresh API payload and re-settle the last completed day."""
         reading, record_date = extract_reading(datas)
         if reading is None:
             return
-        if not record_date:
-            # Some branches omit recordDate; fall back to today (CST) so the
-            # same-day / new-day logic still works.
-            record_date = dt_util.now().strftime("%Y-%m-%d")
 
         api_price = extract_price(datas)
         self.price = api_price if api_price else self._default_price
         self.price_source = "api" if api_price else "default"
         self.curr_reading = reading
 
-        baseline_date = self._state.get("date")
-        baseline_reading = _to_float(self._state.get("reading"))
+        now = dt_util.now()
+        today = now.strftime(DATE_FMT)
+        snapshots: dict[str, dict[str, Any]] = self._state.setdefault("snapshots", {})
 
-        if baseline_reading is None or not baseline_date:
-            await self._reset(record_date, reading)
+        dirty = False
+        snap = snapshots.get(today)
+        current = _to_float(snap.get("reading")) if isinstance(snap, dict) else None
+        if current is None or reading > current:
+            snapshots[today] = {
+                "reading": reading,
+                "record_date": record_date,
+                "observed_at": now.isoformat(timespec="seconds"),
+            }
+            dirty = True
+
+        self._prune(today)
+        self._settle(today)
+        self._refresh_diagnostics()
+
+        if dirty:
+            await self._save()
+
+    # ---------------------------------------------------------------- helpers
+    def _prune(self, today: str) -> None:
+        """Keep the snapshot map small (and drop future-dated junk)."""
+        snapshots: dict[str, dict[str, Any]] = self._state.setdefault("snapshots", {})
+        cutoff = (datetime.strptime(today, DATE_FMT) - timedelta(days=MAX_SNAPSHOTS)).strftime(
+            DATE_FMT
+        )
+        for key in [k for k in snapshots if k < cutoff or k > today]:
+            snapshots.pop(key, None)
+
+    def _settle(self, today: str) -> None:
+        """Usage of the most recent *completed* day = newest closed snapshot − previous."""
+        snapshots: dict[str, dict[str, Any]] = self._state.get("snapshots", {})
+        closed = sorted(d for d in snapshots if d < today)
+        if len(closed) < 2:
+            if closed:
+                self.status = f"等待第二个完整日（已有快照：{closed[-1]}）"
+            else:
+                self.status = "等待数据"
             return
 
-        if record_date and record_date < baseline_date:
-            # Reading went backwards (meter swap / API glitch) — restart baseline.
-            _LOGGER.info(
-                "读数日期回退 %s < %s，重置基线", record_date, baseline_date
-            )
-            await self._reset(record_date, reading)
+        d_end, d_start = closed[-1], closed[-2]
+        r_end = _to_float(snapshots[d_end].get("reading"))
+        r_start = _to_float(snapshots[d_start].get("reading"))
+        if r_end is None or r_start is None:
+            self.status = "快照数据不完整"
             return
 
-        if record_date == baseline_date:
-            # Same day: the meter may revise the reading, but there is no new
-            # completed day yet. Only keep the larger value as the baseline.
-            if reading > baseline_reading:
-                self._state["reading"] = reading
-                await self._save()
-            self.curr_reading = reading
-            return
-
-        if reading < baseline_reading:
+        delta = round(r_end - r_start, 3)
+        if delta < 0:
+            # Meter swapped or reading reset — do not publish a negative value.
             _LOGGER.warning(
-                "读数回退 %.3f < %.3f，重置基线", reading, baseline_reading
+                "读数回退 %s %.3f → %s %.3f，暂不产出日用量", d_start, r_start, d_end, r_end
             )
-            await self._reset(record_date, reading)
+            self.usage = None
+            self.usage_start = d_start
+            self.usage_end = d_end
+            self.prev_reading = r_start
+            self.days = _day_gap(d_start, d_end)
+            self.status = "读数回退，等待新基线"
             return
 
-        # A new day's reading arrived → the delta belongs to the day that
-        # just closed.
-        delta = round(reading - baseline_reading, 3)
         self.usage = delta
-        self.usage_start = baseline_date
-        self.usage_end = record_date
-        self.prev_reading = baseline_reading
-        self.days = _day_gap(baseline_date, record_date)
+        self.usage_start = d_start
+        self.usage_end = d_end
+        self.prev_reading = r_start
+        self.days = _day_gap(d_start, d_end)
+        self.status = "正常" if self.days == 1 else f"跨 {self.days} 天结算"
 
         self._state.update(
             {
-                "date": record_date,
-                "reading": reading,
                 "usage": delta,
-                "usage_start": baseline_date,
-                "usage_end": record_date,
-                "prev_reading": baseline_reading,
+                "usage_start": d_start,
+                "usage_end": d_end,
+                "prev_reading": r_start,
                 "days": self.days,
             }
         )
-        await self._save()
-        _LOGGER.info(
-            "新抄表日 %s：上期 %.3f → 本期 %.3f，用量 %.3f m³（%s 天）",
-            record_date, baseline_reading, reading, delta, self.days,
+        _LOGGER.debug(
+            "结算 %s：%s %.3f → %.3f，用量 %.3f m³", d_end, d_start, r_start, r_end, delta
         )
 
-    async def _reset(self, record_date: str | None, reading: float) -> None:
-        """Start a fresh baseline without producing a usage value."""
-        self.curr_reading = reading
-        self._state = {
-            "date": record_date,
-            "reading": reading,
-            "usage": self.usage,
-            "usage_start": self.usage_start,
-            "usage_end": self.usage_end,
-            "prev_reading": self.prev_reading,
-            "days": self.days,
-        }
-        await self._save()
+    def _refresh_diagnostics(self) -> None:
+        snapshots: dict[str, dict[str, Any]] = self._state.get("snapshots", {})
+        self.snapshot_days = len(snapshots)
+        if snapshots:
+            latest = max(snapshots)
+            self.latest_date = latest
+            snap = snapshots[latest] or {}
+            self.latest_observed = snap.get("observed_at")
+            self.latest_record_date = snap.get("record_date")
+        else:
+            self.latest_date = self.latest_observed = self.latest_record_date = None
 
     async def _save(self) -> None:
         await self._store.async_save(self._state)

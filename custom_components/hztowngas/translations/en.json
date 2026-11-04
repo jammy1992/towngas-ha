@@ -3,27 +3,40 @@
     "step": {
       "user": {
         "title": "TownGas — Select your branch",
-        "description": "Pick the branch that serves your gas meter ({branch_count} branches bundled).\n\nThe WeChat OAuth clientId is derived as \"{prefix} + branch orgCode (underscores removed)\", so this step decides which branch's official account the QR code points to.\n\nIf you already know the clientId, fill it in the second field to override.",
+        "description": "Pick the branch that serves your gas meter ({branch_count} branches bundled).\n\nThe WeChat OAuth clientId is derived as \"{prefix} + branch orgCode (underscores removed)\", so this step decides which branch's official account the QR code points to. **Picking the wrong branch makes the API return 10001 (\"system upgrading\") after login.**\n\nIf you already know the clientId, fill it in the second field to override.",
         "data": {
           "org_code": "Branch",
           "client_id": "Custom clientId (optional)"
         }
       },
       "auth": {
-        "title": "TownGas — WeChat authorization & account",
-        "description": "Branch: {branch}\n\nclientId: `{client_id}`\n\nScan the QR code below with **WeChat on your phone** (PC browsers are blocked):\n\n{oauth_qr_markdown}\n\nA blank page after scanning is normal — copy the whole URL from the address bar and paste it into the first field.\n\nAuth URL: {oauth_url}",
+        "title": "TownGas — WeChat authorization",
+        "description": "Branch: **{branch}**\n\nclientId: `{client_id}`\n\nScan the QR code below with **WeChat on your phone** (PC browsers are blocked):\n\n{oauth_qr_markdown}\n\nA blank page after scanning is normal — copy the whole URL from the address bar and paste it below.\n\nThe account number is read automatically from your WeChat account after authorization.\n\nAuth URL: {oauth_url}",
         "data": {
           "auth_code": "authCode (or full redirect URL)",
-          "subs_id": "subsId (32 chars)",
-          "subs_code": "subsCode",
           "scan_interval": "Data refresh interval (s, 60-86400, default 21600)",
           "token_refresh_interval": "Token refresh interval (s, 300-7140, default 1800)",
           "default_price": "Default gas price (CNY/m³, used when the API omits it)"
         }
       },
+      "pick_subs": {
+        "title": "TownGas — Pick your account",
+        "description": "Branch: **{branch}**\n\n{subs_count} account(s) found under this login. Pick the one to add:\n\n{detected}",
+        "data": {
+          "subs_id": "Account"
+        }
+      },
+      "manual_subs": {
+        "title": "TownGas — Enter the account manually",
+        "description": "Branch: **{branch}**\n\nclientId: `{client_id}`\n\n⚠️ Could not detect the accounts of this login: {account_note}\n\nEnter the subsId (32 chars) and subsCode. The integration validates them against the API before saving, so a wrong value cannot be stored.\n\nError 10001 (\"system upgrading\") usually means the **wrong branch** was selected. Go back and re-pick the branch, or delete this entry and add it again.",
+        "data": {
+          "subs_id": "subsId (32 chars)",
+          "subs_code": "subsCode"
+        }
+      },
       "reauth_confirm": {
         "title": "TownGas — Re-authorize",
-        "description": "The stored token is no longer valid. Confirm your branch ({branch_count} bundled) so the QR code points to the right official account.",
+        "description": "The stored token is no longer valid. WeChat authorization is required again.\n\nCurrently recorded branch: **{current_branch}**\n\nIf that is not your branch, pick the right one here ({branch_count} bundled). A wrong branch causes error 10001.",
         "data": {
           "org_code": "Branch",
           "client_id": "Custom clientId (optional)"
@@ -31,34 +44,38 @@
       },
       "reauth_token": {
         "title": "TownGas — Paste the new authCode",
-        "description": "Branch: {branch}\n\nScan the QR code below with **WeChat on your phone**:\n\n{oauth_qr_markdown}\n\nPaste the full redirect URL below.\n\nAuth URL: {oauth_url}",
+        "description": "Branch: **{branch}**\n\nScan the QR code below with **WeChat on your phone**:\n\n{oauth_qr_markdown}\n\nPaste the full redirect URL below. The account number is verified automatically.\n\nAuth URL: {oauth_url}",
         "data": {
           "auth_code": "authCode (or full redirect URL)"
         }
       }
     },
     "abort": {
-      "already_configured": "This account is already configured.",
+      "already_configured": "This account is already configured. Delete the existing entry first to switch accounts.",
       "reauth_successful": "Re-authorization successful."
     },
     "error": {
-      "client_id_required": "Select a branch or enter a clientId.",
-      "client_id_invalid": "This branch did not return a WeChat redirect (clientId rejected). Check the branch, or enter a clientId manually.",
-      "oauth_url_failed": "Failed to fetch the WeChat auth URL. Check internet connectivity.",
-      "exchange_failed": "Token exchange failed — the authCode is single-use, scan again if it expired.",
-      "auth_failed": "Authorization failed, no valid token received.",
-      "subs_required": "subsId and subsCode are required."
+      "client_id_required": "Select a branch, or enter a clientId manually.",
+      "client_id_invalid": "This branch did not return a WeChat authorization redirect (clientId not active). Check the branch selection; if it still fails, enter the clientId manually.",
+      "oauth_url_failed": "Failed to fetch the WeChat authorization URL. Check Home Assistant's internet access.",
+      "exchange_failed": "Token exchange failed. Check the authCode (single use; rescan if expired).",
+      "auth_failed": "Authorization failed — no valid token returned.",
+      "subs_required": "subsId and subsCode cannot be empty.",
+      "subs_mismatch": "The selected account does not belong to this login.",
+      "org_mismatch": "TownGas returned 10001 (\"system upgrading\"): the account does not belong to this login / branch. Go back and confirm the branch (cities with several branches are easy to mix up); if the branch is correct, make sure the account really is under this WeChat login.",
+      "subs_invalid": "Fetching data for this account failed. Check that subsId / subsCode are not swapped or truncated.",
+      "subs_no_data": "The API returned no reading for this account. Check the account number (a newly installed meter may have no reading yet)."
     }
   },
   "options": {
     "step": {
       "init": {
-        "title": "TownGas — Options",
-        "description": "Branch: {branch}\nclientId: `{client_id}`\n\nChanging the branch requires re-scanning; remove and re-add the entry instead.",
+        "title": "TownGas — Settings",
+        "description": "Branch: **{branch}**\nclientId: `{client_id}`\nAccount: **{subs_code}**\n\nChanging branch or account requires re-authorization. Delete the entry and add it again (or use \"Re-authorize\").",
         "data": {
           "scan_interval": "Data refresh interval (s, 60-86400, default 21600)",
           "token_refresh_interval": "Token refresh interval (s, 300-7140, default 1800)",
-          "default_price": "Default gas price (CNY/m³)"
+          "default_price": "Default gas price (CNY/m³, used when the API omits it)"
         }
       }
     }
@@ -72,10 +89,10 @@
         "name": "Account balance"
       },
       "daily_usage": {
-        "name": "Previous day usage"
+        "name": "Yesterday usage"
       },
       "daily_cost": {
-        "name": "Previous day cost"
+        "name": "Yesterday cost"
       }
     },
     "button": {

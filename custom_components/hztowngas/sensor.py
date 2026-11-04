@@ -93,6 +93,8 @@ async def async_setup_entry(
     await tracker.async_load()
     if coordinator.data:
         await tracker.async_handle(_datas(coordinator))
+    # 供 diagnostics 读取日报内部状态
+    data["tracker"] = tracker
 
     def _on_coordinator_update() -> None:
         """Feed every successful payload into the daily tracker first."""
@@ -283,6 +285,11 @@ class TownGasDailyUsageSensor(TownGasBaseSensor):
             "上期读数": self._tracker.prev_reading,
             "本期读数": self._tracker.curr_reading,
             "单价": self._tracker.price,
+            "状态": self._tracker.status,
+            "快照天数": self._tracker.snapshot_days,
+            "最新快照日期": self._tracker.latest_date,
+            "最新读数时间": self._tracker.latest_observed,
+            "接口抄表日": self._tracker.latest_record_date,
         }
 
 
@@ -320,5 +327,7 @@ class TownGasDailyCostSensor(TownGasBaseSensor):
             "用量": self._tracker.usage,
             "单价": self._tracker.price,
             "单价来源": "接口" if self._tracker.price_source == "api" else "默认值",
+            "开始日期": self._tracker.usage_start,
             "结束日期": self._tracker.usage_end,
+            "状态": self._tracker.status,
         }

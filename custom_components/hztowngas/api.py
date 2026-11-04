@@ -38,8 +38,134 @@ class ClientIdMissing(Exception):
     """Raised when no OAuth clientId is available for building the auth URL."""
 
 
+# ----------------------------------------------------------------------
+#  Response helpers — 容错解析（港华不同分公司的返回结构略有差异）
+# ----------------------------------------------------------------------
+
+# 依次尝试的「当前登录账号下的户号列表」接口；命中一个即停止。
+ACCOUNT_PATHS = (
+    "/usersubs/getLoginUserInfo",
+    "/usersubs/getSubsList",
+    "/usersubs/getUserSubs",
+)
+
+_SUBS_ID_KEYS = ("subsid", "subsno", "subs_id")
+_SUBS_CODE_KEYS = ("subscode", "custcode", "custno", "subs_code")
+_SUBS_NAME_KEYS = ("subsname", "custname", "username", "subs_name")
+_SUBS_ADDR_KEYS = ("subsaddr", "address", "addr")
+
+# 10001 = 港华网关的通用失败码（页面提示「系统正在升级中......」）
+# 既可能是登录态失效，也可能是「这个户号不属于当前登录的分公司」。
+ERR_TOKEN_INVALID = "10001"
+
+
 def _md5(s: str) -> str:
     return hashlib.md5(s.encode()).hexdigest()
+
+
+def _as_float(value: Any, default: float = 0.0) -> float:
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return default
+
+
+def _as_int(value: Any, default: int = 0) -> int:
+    try:
+        return int(float(value))
+    except (TypeError, ValueError):
+        return default
+
+
+def _norm_dict(d: dict) -> dict[str, Any]:
+    """键名归一化：去下划线 + 转小写，便于跨分公司容错。"""
+    return {str(k).replace("_", "").lower(): v for k, v in d.items()}
+
+
+def _walk_dicts(node: Any):
+    """深度遍历所有 dict（含嵌套 list）。"""
+    if isinstance(node, dict):
+        yield node
+        for value in node.values():
+            yield from _walk_dicts(value)
+    elif isinstance(node, list):
+        for item in node:
+            yield from _walk_dicts(item)
+
+
+def _first_value(norm: dict[str, Any], keys: tuple[str, ...]) -> str:
+    for key in keys:
+        value = norm.get(key)
+        if value not in (None, "", 0):
+            return str(value).strip()
+    return ""
+
+
+def extract_subs(payload: Any) -> list[dict[str, str]]:
+    """从任意层级的返回体里抠出户号列表：[{subs_id, subs_code, name, addr}]。"""
+    merged: dict[str, dict[str, str]] = {}
+    for item in _walk_dicts(payload):
+        norm = _norm_dict(item)
+        subs_id = _first_value(norm, _SUBS_ID_KEYS)
+        if not subs_id or len(subs_id) < 6:
+            continue
+        entry = merged.setdefault(
+            subs_id,
+            {"subs_id": subs_id, "subs_code": "", "name": "", "addr": ""},
+        )
+        for field, keys in (
+            ("subs_code", _SUBS_CODE_KEYS),
+            ("name", _SUBS_NAME_KEYS),
+            ("addr", _SUBS_ADDR_KEYS),
+        ):
+            if not entry[field]:
+                entry[field] = _first_value(norm, keys)
+    return [v for v in merged.values() if v["subs_code"] or v["name"] or v["addr"]]
+
+
+def result_code(payload: Any) -> str:
+    """提取返回体里的业务错误码（0/空 视为成功）。"""
+    if not isinstance(payload, dict):
+        return ""
+    datas = payload.get("datas")
+    if isinstance(datas, dict):
+        for key in ("errorCode", "resultCode"):
+            value = datas.get(key)
+            if value not in (None, ""):
+                return str(value)
+    for key in ("resultCode", "result_code", "errorCode"):
+        value = payload.get(key)
+        if value not in (None, ""):
+            return str(value)
+    return ""
+
+
+def result_message(payload: Any) -> str:
+    """提取返回体里的业务错误文案。"""
+    if not isinstance(payload, dict):
+        return ""
+    datas = payload.get("datas")
+    if isinstance(datas, dict):
+        for key in ("errorMsg", "resultMsg"):
+            value = datas.get(key)
+            if value:
+                return str(value)
+    for key in ("resultMsg", "result_msg", "errorMsg", "msg"):
+        value = payload.get(key)
+        if value:
+            return str(value)
+    return ""
+
+
+def is_ok_code(code: str) -> bool:
+    return str(code or "").strip() in ("", "0", "200", "0000")
+
+
+def strip_html(text: str) -> str:
+    """港华的错误文案里带 <p style=...>，去掉标签便于显示。"""
+    import re
+
+    return re.sub(r"<[^>]+>", "", text or "").strip()
 
 
 def _sign(params: dict[str, Any]) -> str:
@@ -67,8 +193,8 @@ class TownGasApi:
         self._session = session
         self.access_token = access_token
         self.refresh_token = refresh_token
-        self.token_create_time = token_create_time
-        self.token_expires_in = token_expires_in
+        self.token_create_time = _as_float(token_create_time)
+        self.token_expires_in = _as_int(token_expires_in, 7200)
         self.client_id = client_id or DEFAULT_CLIENT_ID
 
     @property
@@ -133,7 +259,7 @@ class TownGasApi:
         if data.get("access_token"):
             self.access_token = data["access_token"]
             self.refresh_token = data.get("refresh_token", self.refresh_token)
-            self.token_expires_in = data.get("expires_in", 7200)
+            self.token_expires_in = _as_int(data.get("expires_in", 7200), 7200)
             self.token_create_time = time.time()
         return data
 
@@ -160,7 +286,7 @@ class TownGasApi:
             if data.get("access_token"):
                 self.access_token = data["access_token"]
                 self.refresh_token = data.get("refresh_token", self.refresh_token)
-                self.token_expires_in = data.get("expires_in", 7200)
+                self.token_expires_in = _as_int(data.get("expires_in", 7200), 7200)
                 self.token_create_time = time.time()
                 _LOGGER.debug("Token refreshed, expires_in=%s", self.token_expires_in)
                 return True
@@ -243,15 +369,75 @@ class TownGasApi:
                 curr = first.get("currReading")
         err_code = datas.get("errorCode") if isinstance(datas, dict) else None
         err_msg = datas.get("errorMsg") if isinstance(datas, dict) else None
+        code = result_code(result)
         _LOGGER.debug(
-            "preCheck subs_id=%s currReading=%s errorCode=%s errorMsg=%s",
-            subs_id, curr, err_code, err_msg,
+            "preCheck subs_id=%s currReading=%s code=%s errorCode=%s errorMsg=%s",
+            subs_id, curr, code, err_code, err_msg,
         )
+        if not is_ok_code(code):
+            _LOGGER.warning(
+                "preCheck 失败 code=%s msg=%s body=%s",
+                code, strip_html(result_message(result)), str(result)[:500],
+            )
         return result
 
     async def get_login_user_info(self) -> dict[str, Any]:
         """GET /usersubs/getLoginUserInfo."""
         return await self._cbs_get("/usersubs/getLoginUserInfo")
+
+    async def fetch_account(self) -> dict[str, Any]:
+        """用当前 token 问「我是谁、我名下有哪些户号」。
+
+        返回 {"subs": [...], "code": "10001"/"", "msg": "...", "path": "命中的接口"}。
+        code 非空且不是成功码时，说明连账号信息都拿不到（通常是登录态失效或
+        令牌与分公司不匹配）；subs 非空则说明令牌可用，户号可以自动识别。
+        """
+        first_code = ""
+        first_msg = ""
+        for path in ACCOUNT_PATHS:
+            try:
+                result = await self._cbs_get(path)
+            except AuthError:
+                raise
+            except Exception:  # noqa: BLE001 — 探测接口失败不应中断流程
+                _LOGGER.debug("账号信息接口 %s 请求异常", path, exc_info=True)
+                continue
+
+            code = result_code(result)
+            msg = strip_html(result_message(result))
+            if not is_ok_code(code):
+                _LOGGER.debug("账号信息接口 %s 返回错误 %s: %s", path, code, msg)
+                if not first_code:
+                    first_code, first_msg = code, msg
+                continue
+
+            found = extract_subs(result)
+            _LOGGER.debug("账号信息接口 %s 识别到户号 %s 个", path, len(found))
+            if found:
+                return {"subs": found, "code": "", "msg": "", "path": path}
+
+        return {"subs": [], "code": first_code, "msg": first_msg, "path": ""}
+
+    async def verify_subs(self, subs_id: str) -> tuple[bool, str, str]:
+        """试抓一次户号数据，返回 (是否可用, 错误码, 错误文案)。"""
+        try:
+            result = await self.pre_check(subs_id)
+        except AuthError:
+            raise
+        except Exception as err:  # noqa: BLE001
+            return False, "", str(err)
+        code = result_code(result)
+        msg = strip_html(result_message(result))
+        datas = result.get("datas") if isinstance(result, dict) else {}
+        lst = datas.get("readingRptList") if isinstance(datas, dict) else None
+        has_reading = bool(
+            lst and isinstance(lst, list) and isinstance(lst[0], dict)
+            and lst[0].get("currReading") is not None
+        )
+        if not is_ok_code(code):
+            return False, code, msg
+        # 没报错但也没有读数 → 视为该户号在此登录态下不可用
+        return has_reading, "" if has_reading else "empty", msg
 
 
 class AuthError(Exception):
