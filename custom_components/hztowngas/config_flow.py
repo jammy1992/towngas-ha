@@ -509,10 +509,11 @@ class TownGasConfigFlow(ConfigFlow, domain=DOMAIN):
     async def async_step_reauth_confirm(
         self, user_input: dict[str, Any] | None = None,
     ) -> ConfigFlowResult:
-        """重新授权：已知道 clientId 就直接给二维码，否则先让用户选分公司。"""
+        """重新授权：先把分公司摆出来（默认选中当前记录的），允许顺手改掉。"""
         self._reauth_mode = True
+        current_org = self._entry.data.get(CONF_ORG_CODE, "") if self._entry else ""
         current_branch = (
-            self._entry.data.get(CONF_ORG_NAME) or self._entry.data.get(CONF_ORG_CODE) or "未记录"
+            self._entry.data.get(CONF_ORG_NAME) or current_org or "未记录"
         )
         if user_input is not None:
             manual = str(user_input.get(CONF_CLIENT_ID, "")).strip()
@@ -535,10 +536,12 @@ class TownGasConfigFlow(ConfigFlow, domain=DOMAIN):
                 errors=errors,
             )
 
-        known = self._known_client_id()
-        if known and await self._prepare_oauth(known, self._entry.data.get(CONF_ORG_CODE, "")):
-            # 直接进入粘贴 authCode 的表单（二维码在那个表单的说明里）
-            return await self.async_step_reauth_token()
+        # 表单始终显示：分公司选错是 10001 的头号原因，重新授权正是改它的时机。
+        # 没记录 orgCode 的旧条目（v1 迁移上来的）尝试用已有 clientId 取一次二维码备用。
+        if not current_org:
+            known = self._known_client_id()
+            if known:
+                await self._prepare_oauth(known, "")
 
         errors = self._errors
         self._errors = {}
@@ -548,7 +551,7 @@ class TownGasConfigFlow(ConfigFlow, domain=DOMAIN):
                 "branch_count": str(len(BRANCH_OPTIONS)),
                 "current_branch": current_branch,
             },
-            data_schema=_branch_schema(self._entry.data.get(CONF_ORG_CODE) if self._entry else None),
+            data_schema=_branch_schema(current_org or None),
             errors=errors,
         )
 
