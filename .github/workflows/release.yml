@@ -1,0 +1,51 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build zip (顶层 hztowngas/)
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          cd custom_components
+          zip -r "../towngas-ha-${VERSION}.zip" hztowngas \
+            -x '*/__pycache__/*' '*.pyc' '*.pyo'
+          cd ..
+          unzip -l "towngas-ha-${VERSION}.zip" | tail -3
+
+      - name: Compose release notes
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          {
+            echo "## ${GITHUB_REF_NAME}"
+            echo
+            awk -v head="## ${VERSION}" '
+              $0 == head { inside = 1; next }
+              inside && /^## / { exit }
+              inside { print }
+            ' CHANGELOG.md
+            echo
+            echo "---"
+            echo
+            echo "**安装**：解压后把 \`hztowngas/\` 整个目录放到 \`config/custom_components/\` 下，重启 Home Assistant。"
+            echo "用 HACS 的话不用下载附件，直接在 HACS 里更新即可。"
+          } > release_body.md
+          wc -l release_body.md
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: towngas-ha-*.zip
+          body_path: release_body.md
+          draft: false
+          prerelease: false
