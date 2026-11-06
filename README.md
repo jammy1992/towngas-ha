@@ -76,13 +76,13 @@ DEFAULT_CLIENT_ID = "pe92a8wechatYH0105"   # YH0105 = 杭州余杭
 
 ### 方式二：手动
 
-把 `custom_components/hztowngas` 整个目录复制到 HA 配置目录下：
+下载 [最新 Release](https://github.com/jammy1992/towngas-ha/releases/latest) 里的 `towngas-ha-x.y.z.zip`，解压后把 `hztowngas/` 整个目录放到 HA 配置目录下：
 
 ```
 config/custom_components/hztowngas/manifest.json   ← 最终路径应为此
 ```
 
-然后重启 HA。
+然后重启 HA。注意 zip 里最外层就是 `hztowngas/`，**不要再套一层**——常见错误是变成 `custom_components/hztowngas/hztowngas/manifest.json`，那样 HA 会认不出来。
 
 > 依赖 `qrcode[pil]`（画二维码用），HA 会在启动时自动安装，无需手动 pip。
 
